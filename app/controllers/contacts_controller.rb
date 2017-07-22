@@ -1,8 +1,8 @@
 class ContactsController < ApplicationController
 
   def index
-    account_sid = 'AC288a35e4a1b5650264a87bb04cf8da32'
-    auth_token = '027ae70ee04caaf04a2e335ed9c737e6'
+    account_sid = 'safasfas'
+    auth_token = '02c737e6saffasf'
     @client = Twilio::REST::Client.new account_sid, auth_token
        messages = @client.messages
       #  @mymessage = messages.where(body: params[:search])
