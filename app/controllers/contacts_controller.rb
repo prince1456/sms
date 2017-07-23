@@ -1,8 +1,10 @@
 class ContactsController < ApplicationController
 
   def index
-    account_sid = 'safasfas'
-    auth_token = '02c737e6saffasf'
+    @category = Category.new
+    @categories = Category.all
+    account_sid = 'AC288a35e4a1b5650264a87bb04cf8da32'
+    auth_token = '027ae70ee04caaf04a2e335ed9c737e6'
     @client = Twilio::REST::Client.new account_sid, auth_token
        messages = @client.messages
       #  @mymessage = messages.where(body: params[:search])
@@ -16,9 +18,15 @@ class ContactsController < ApplicationController
 
   end
   def hallo
-    Contact.create(number: params[:From], body: params[:Body] )
+    # @categories = Category.all
 
+    if Category.exists?(title: params[:Body])
+      @category = Category.find_by_title!(params[:Body])
+      contact = Contact.create(number: params[:From], body: params[:Body] )
+      categorization =  Categorization.create(category_id: @category.id, contact_id: contact.id)
+    end
   end
+
   def new
     twiml = Twilio::TwiML::Response.new do |r|
         r.Message "The Robots are coming! Head for the hills!"
@@ -45,6 +53,12 @@ class ContactsController < ApplicationController
   private
   def strong_params
 
+  end
+  def find_category
+    Category.all.each do |cat|
+      cat.include?(params[:body])
+      @category = cat
+    end
   end
 
   def authentication
